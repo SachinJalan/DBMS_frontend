@@ -22,22 +22,62 @@ def index():
 
 @app.route('/submit', methods=['POST'])
 def submit():
+    # if request.method == 'POST':
+    #     details = request.form
+    #     email = session.get('email')
+    #     # Fetch form data
+    #     details = request.form
+    #     name = details['name']
+    #     lab_name = details['lab_name']
+    #     date_from = details['date_from']
+    #     date_to = details['date_to']
+    #     time = details['time']
+
+    #     # Insert into MySQL
+    #     cur = mysql.connection.cursor()
+    #     cur.execute("INSERT INTO bookings (name, lab_name, date_from, date_to, time) VALUES (%s, %s, %s, %s, %s)", (name, lab_name, date_from, date_to, time))
+    #     mysql.connection.commit()
+    #     cur.close()
+        
     if request.method == 'POST':
-        # Fetch form data
         details = request.form
-        name = details['name']
-        lab_name = details['lab_name']
-        date_from = details['date_from']
-        date_to = details['date_to']
-        time = details['time']
+        email = session.get('email')  # Retrieve email from session
 
-        # Insert into MySQL
-        cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO bookings (name, lab_name, date_from, date_to, time) VALUES (%s, %s, %s, %s, %s)", (name, lab_name, date_from, date_to, time))
-        mysql.connection.commit()
-        cur.close()
+        # Check if the form is for lab booking or equipment issuing
+        if 'lab_name' in details:
+                # Lab booking form data
+                name = details['name']
+                lab_name = details['lab_name']
+                time_from = details['time_from']
+                time_to= details['time_to']
+                date= details['date']
+                
+                cur = mysql.connection.cursor()
+                cur.execute("INSERT INTO bookings (user_email,name,lab_name,time_from, time_to,date) VALUES (%s,%s, %s, %s, %s, %s)", (email,name, lab_name, time_from, time_to,date))
+                mysql.connection.commit()
+                cur.close()
+                          
+        else:
+                # Equipment issuing form data
+                equipment_type = details['equipmentType']
+                number_of_equipment = details['numberOfEquipment']
+                issue_date = details['issueDate']
+                return_date = details['returnDate']
 
-        return render_template('submit.html')
+                # Insert equipment issuing data into EquipmentIssued table
+                # sql = "INSERT INTO EquipmentIssued (user_email, equipment_type, number_of_equipment, issue_date, return_date) VALUES (%s, %s, %s, %s, %s)"
+                # val = (email, equipment_type, number_of_equipment, issue_date, return_date)
+                
+                cur = mysql.connection.cursor()
+                cur.execute("INSERT INTO EquipmentIssued (user_email, equipment_type, number_of_equipment, issue_date, return_date) VALUES (%s, %s, %s, %s, %s)", (email, equipment_type, number_of_equipment, issue_date, return_date))
+                mysql.connection.commit()
+                cur.close()
+                
+        # lab_bookings = fetch_lab_bookings(email)
+        lab_bookings=fetch_lab_bookings(email)
+        equipment_issued = fetch_equipment_issued(email)
+        return render_template('submit.html', equipment_issued=equipment_issued, lab_bookings=lab_bookings)
+        # return render_template('submit.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -112,7 +152,32 @@ def booking_lab():
         return render_template('bookinglab.html')
     return redirect(url_for('login'))
 
-  
+def fetch_lab_bookings(email):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM bookings WHERE user_email = %s", (email,))
+    lab_bookings = cur.fetchall()  # Fetch all rows
+
+    return lab_bookings
+
+def fetch_equipment_issued(email):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM EquipmentIssued WHERE user_email = %s", (email,))
+    equipment_issued = cur.fetchall()  # Fetch all rows
+    
+    return equipment_issued
+
+# @app.route('/submit')
+# def new_submit():
+#     # Fetch lab bookings and equipment issued for the current user
+    
+#     email=session.get('email')  # Assuming you have a function to get the current user's ID
+#     lab_bookings = fetch_lab_bookings(email)
+#     equipment_issued = fetch_equipment_issued(email)
+    
+#     return render_template('submit.html', lab_bookings=lab_bookings, equipment_issued=equipment_issued)
+
+
+
 if __name__ == '__main__':
             
     app.run(debug=True)

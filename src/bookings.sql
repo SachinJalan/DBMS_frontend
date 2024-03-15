@@ -4,11 +4,12 @@ USE lab_bookings;
 
 CREATE TABLE IF NOT EXISTS bookings (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    user_email VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL,
     lab_name VARCHAR(255) NOT NULL,
-    date_from DATE NOT NULL,
-    date_to DATE NOT NULL,
-    time TIME NOT NULL
+    time_from TIME NOT NULL,
+    time_to TIME NOT NULL ,
+    date DATE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS users (
@@ -18,4 +19,13 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 
-select * from users;
+CREATE TABLE IF NOT EXISTS EquipmentIssued (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_email VARCHAR(255),
+    equipment_type VARCHAR(255),
+    number_of_equipment INT,
+    issue_date DATE,
+    return_date DATE
+);
+
+
