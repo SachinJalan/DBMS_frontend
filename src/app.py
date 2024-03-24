@@ -1,9 +1,16 @@
 from flask import Flask, render_template, request, redirect,session, url_for
+# from Flask-MySQLdb import MySQL
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 from flask import redirect
+import os
 
-app = Flask(__name__,  template_folder='C:/Users/anish/Desktop/Frontend_Lab/DBMS_frontend/src')
+# app = Flask(__name__,  template_folder='C:/Users/anish/Desktop/Frontend_Lab/DBMS_frontend/src')
+
+# Get the absolute path of the directory where this file is located
+dir_path = os.path.dirname(os.path.realpath(__file__))
+
+app = Flask(__name__, template_folder=dir_path)
 
 # Configure MySQL
 app.secret_key = 'abcd2123445'  
@@ -221,6 +228,7 @@ def fetch_name(email):
     return name[0]
 
 
-if __name__ == '__main__':
-            
+if __name__ == '__main__':       
     app.run(debug=True)
+
+
