@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+    <div id="page-container" class="mx-auto flex min-h-screen w-full min-w-[320px] flex-col bg-gray-100 ">
+        <main id="page-content" class="flex max-w-full flex-auto flex-col">
+            <div class="relative mx-auto flex min-h-screen w-full max-w-3xl items-center justify-center p-4 lg:p-8">
+                <section class="w-full max-w-xl py-6">
+                    <header class="mb-10 text-center">
+                        <div class="text-center">
+                            <h1 class="mb-2 inline-flexitems-center space-x-2 text-2xl font-bold">
+                                <div>
+                                    <img src="images/logo.png" alt="" class="inline-block mx-1" width="100">
+                                </div>
+                                <span>Lab Management System</span>
+                            </h1>
+                        </div>
+                        <h2 class="text-sm font-medium text-gray-500">
+                            Create an account to access the dashboard
+                        </h2>
+                    </header>
+
+                    <!-- Registration Form -->
+                    <div class="flex flex-col overflow-hidden rounded-lg bg-white shadow-sm">
+                        <div class="grow p-5 md:px-10 md:py-8">
+                            <form id="registerForm" class="space-y-6" action="/register" method="POST">
+                                <div class="space-y-2">
+                                    <label for="reg_email" class="text-sm font-medium">Email</label>
+                                    <input type="email" id="reg_email" name="reg_email" placeholder="Enter your email"
+                                        class="block w-full rounded-lg border border-gray-200 px-4 py-2 leading-5 placeholder-gray-500 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="roll number" class="text-sm font-medium">Roll Number/Employee ID</label>
+                                    <input type="text" id="roll number" name="roll number" placeholder="Enter your Roll Number/Employee ID"
+                                        class="block w-full rounded-lg border border-gray-200 px-4 py-2 leading-5 placeholder-gray-500 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="first name" class="text-sm font-medium">First Name</label>
+                                    <input type="text" id="first name" name="first name" placeholder="Enter your first name"
+                                        class="block w-full rounded-lg border border-gray-200 px-4 py-2 leading-5 placeholder-gray-500 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="middle name" class="text-sm font-medium">Middle Name</label>
+                                    <input type="text" id="middle name" name="middle name" placeholder="Enter your middle name"
+                                        class="block w-full rounded-lg border border-gray-200 px-4 py-2 leading-5 placeholder-gray-500 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="last name" class="text-sm font-medium">Last Name</label>
+                                    <input type="text" id="last name" name="last name" placeholder="Enter your last name"
+                                        class="block w-full rounded-lg border border-gray-200 px-4 py-2 leading-5 placeholder-gray-500 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="role" class="text-sm font-medium">Role</label>
+                                    <div class="mt-2">
+                                        <input type="radio" id="role" name="role" value="student" class="mr-1"> Student
+                                        <input type="radio" id="role" name="role" value="professor"
+                                            class="ml-3 mr-1">Professor
+                                        <input type="radio" id="role" name="role" value="staff" class="ml-3 mr-1"> Staff
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="Lab name" class="text-sm font-medium">Lab Name</label>
+                                    <input type="text" id="lab name" name="Lab name" placeholder="Only enter if you are a staff member"
+                                        class="block w-full rounded-lg border border-gray-200 px-4 py-2 leading-5 placeholder-gray-500 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="reg_password" class="text-sm font-medium">Password</label>
+                                    <input type="password" id="reg_password" name="reg_password"
+                                        placeholder="Enter your password"
+                                        class="block w-full rounded-lg border border-gray-200 px-4 py-2 leading-5 placeholder-gray-500 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="confirm_password" class="text-sm font-medium">Confirm
+                                        Password</label>
+                                    <input type="password" id="confirm_password" name="confirm_password"
+                                        placeholder="Confirm your password"
+                                        class="block w-full rounded-lg border border-gray-200 px-4 py-2 leading-5 placeholder-gray-500 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+                                </div>
+                                <div>
+                                    <button type="submit"
+                                        class="inline-flex w-full items-center justify-center space-x-2 rounded-lg border border-green-700 bg-green-700 px-6 py-3 font-semibold leading-6 text-white hover:border-green-600 hover:bg-green-600 hover:text-white focus:ring focus:ring-green-400 focus:ring-opacity-50 active:border-green-700 active:bg-green-700">
+                                        <span>Register</span>
+                                    </button>
+                                </div>
+                                <div class="text-center text-sm text-gray-600 mt-2">
+                                    <span>Already have an account?</span>
+                                    <a href="/login" class="text-blue-600 hover:underline">Sign in here</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- END Registration Form -->
+                </section>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>
