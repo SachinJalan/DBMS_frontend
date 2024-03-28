@@ -17,12 +17,12 @@ app.secret_key = 'abcd2123445'
 app.config['MYSQL_HOST'] = '127.0.0.1'
 app.config['MYSQL_PORT'] = 3306
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '@B203kairavi'
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'lab_bookings'
 
 mysql = MySQL(app)
 
-
+session_email=None
 @app.route('/')
 def index():
     return render_template('login.html')
@@ -33,16 +33,24 @@ def submit():
     if request.method == 'POST':
         details = request.form
         email = session.get('email')  # Retrieve email from session
-
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM students WHERE Email_ID = %s", (email,))
+        user = cur.fetchone()
+        if user==None:
+            cur.execute("SELECT * FROM professor WHERE Email_ID = %s", (email,))
+            user = cur.fetchone()
+            if user==None:
+                cur.execute("SELECT * FROM staff WHERE Email_ID = %s", (email,))
+                user = cur.fetchone()
+        if user:
+            name=user[1]
         # Check if the form is for lab booking or equipment issuing
         if 'lab_name' in details:
                 # Lab booking form data
-                name = details['name']
                 lab_name = details['lab_name']
                 time_from = details['time_from']
                 time_to= details['time_to']
                 date= details['date']
-                
                 cur = mysql.connection.cursor()
                 cur.execute("INSERT INTO bookings (user_email,name,lab_name,time_from, time_to,date) VALUES (%s,%s, %s, %s, %s, %s)", (email,name, lab_name, time_from, time_to,date))
                 mysql.connection.commit()
@@ -66,16 +74,24 @@ def submit():
                 cur.close()
         
         elif 'Enrolled_Course_ID' in details:
-                enrolled_course_id= details['Enrolled_Course_ID'][1:-1]                
-                enrolled_course_id=enrolled_course_id.split(',')
-                for i in range(len(enrolled_course_id)):
-                    enrolled_course_id[i]=enrolled_course_id[i][1:-1].strip()
-            
-                cur = mysql.connection.cursor()
-                enrolled_course_id=enrolled_course_id[0]
-                cur.execute("INSERT INTO student_enrolled (Course_Id, email) VALUES (%s, %s)", (enrolled_course_id,email))
+            # request.form.getlist('Enrolled_Course_ID')
+            enrolled_course_ids = request.form.getlist('Enrolled_Course_ID')
+            cur = mysql.connection.cursor()
+            cur.execute("SELECT Roll_Number FROM students WHERE Email_ID = %s", (email,))
+            roll_no = cur.fetchone()[0]
+            for enrolled_course in enrolled_course_ids:
+                print(enrolled_course[2:-3])
+                cur.execute("SELECT * FROM student_enrolled WHERE Course_Id = %s AND Roll_Number = %s", (enrolled_course[2:-3], roll_no))
+                user = cur.fetchone()
+                if user:
+                    continue
+                cur.execute("INSERT INTO student_enrolled (Course_Id, Roll_Number) VALUES (%s, %s)", (enrolled_course[2:-3], roll_no))  
                 mysql.connection.commit()
-                cur.close()
+            
+            cur.close()
+
+
+                
           
         elif 'Course_Name' in details:
             # print("Hello")
@@ -84,7 +100,13 @@ def submit():
             credits= details['Credits']
             
             cur = mysql.connection.cursor()
-            cur.execute("INSERT INTO course (email,Course_ID, Course_Name, Credits) VALUES (%s,%s, %s, %s)", (email,course_id,course_name, credits))
+            cur.execute("select * from professor where Email_ID = %s", (email,))
+            user = cur.fetchone()
+            employee_id=user[0]
+            cur.execute("INSERT INTO course (Course_ID, Course_Name, Credits) VALUES (%s, %s, %s)", (course_id,course_name, credits))
+            mysql.connection.commit()
+            cur.execute("INSERT INTO instructor(Course_ID, Employee_ID) VALUES (%s, %s)", (course_id,employee_id))
+            # cur.execute("INSERT INTO course (email,Course_ID, Course_Name, Credits) VALUES (%s,%s, %s, %s)", (email,course_id,course_name, credits))
             mysql.connection.commit()    
             cur.close()
                 
@@ -126,14 +148,21 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
+        # session_email=email
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         # Fetch user from database
         # cur = mysql.connection.cursor()
-        cursor.execute("SELECT * FROM users WHERE email = %s AND password = %s", (email, password))
+        cursor.execute("SELECT * FROM students WHERE Email_ID = %s AND password = %s", (email, password))
         user = cursor.fetchone()
+        if user==None:
+            cursor.execute("SELECT * FROM professor WHERE Email_ID = %s AND password = %s", (email, password))
+            user = cursor.fetchone()
+            if user==None:
+                cursor.execute("SELECT * FROM staff WHERE Email_ID = %s AND password = %s", (email, password))
+                user = cursor.fetchone()
         if user:
             session['loggedin'] = True
-            session['email'] = user['email']
+            session['email'] = user['Email_ID']
             return redirect(url_for('booking_lab'))
         # cursor.close()
 
@@ -156,11 +185,23 @@ def register():
         email = request.form['reg_email']
         password = request.form['reg_password']
         role = request.form['role']
-        name = request.form['name']
-
+        first_name=request.form['first name']
+        last_name=request.form['last name']
+        middle_name = request.form['middle name']
+        roll_no = request.form['roll number']
+        lab_name = request.form['Lab name']
+        # print(role)
         # Insert new user into database
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO users (email, name,password,role) VALUES (%s, %s, %s,%s)", (email, name,password,role))
+        if(role=='student'):
+             cur.execute("INSERT INTO students (Roll_Number, First_Name, Middle_Name, Last_Name, Email_ID, password) VALUES (%s, %s, %s,%s,%s,%s)", (roll_no, first_name,middle_name,last_name,email,password))
+            #  cur.execute("INSERT INTO students (Email_ID, First_Name,password) VALUES (%s, %s, %s,%s)", (email, name,password,role))
+        elif(role=='professor'):
+            cur.execute("INSERT INTO professor (Employee_ID,Email_ID, First_Name, Middle_Name, Last_Name,  password) VALUES (%s,%s, %s, %s,%s,%s)", (roll_no, email, first_name,middle_name,last_name,password))
+            # cur.execute("INSERT INTO professors (Email_ID, First_Name,password) VALUES (%s, %s, %s,%s)", (email, name,password,role))
+        elif(role=='staff'):
+            cur.execute("INSERT INTO staff (Employee_ID,Email_ID, First_Name, Middle_Name, Last_Name, password,Lab_Name) VALUES (%s,%s, %s, %s,%s,%s,%s)", (roll_no, email, first_name,middle_name,last_name,password,lab_name))
+            # cur.execute("INSERT INTO staff (email, name,password) VALUES (%s, %s, %s,%s)", (email, name,password,role))
         mysql.connection.commit()
         cur.close()
 
@@ -195,10 +236,19 @@ def fetch_equipment_issued(email):
 
 def fetch_role(email):
     cur = mysql.connection.cursor()
-    cur.execute("SELECT role FROM users WHERE email = %s", (email,))
+    cur.execute("SELECT * FROM students WHERE Email_ID = %s", (email,))
     role = cur.fetchone() 
-    
-    return role[0]
+    if(role==None):
+        cur.execute("SELECT * FROM professor WHERE Email_ID = %s", (email,))
+        role = cur.fetchone() 
+        if(role==None):
+            cur.execute("SELECT * FROM staff WHERE Email_ID = %s", (email,))
+            role = 'staff'
+        else:
+            role = 'professor'
+    else:
+        role = 'student'
+    return role
 
 def fetch_courses():
     cur = mysql.connection.cursor()
@@ -210,21 +260,32 @@ def fetch_courses():
 
 def fetch_student_courses(email):
     cur = mysql.connection.cursor()
-    cur.execute("SELECT Course_ID FROM student_enrolled WHERE email = %s", (email,))
+    cur.execute("SELECT * FROM students WHERE Email_ID = %s", (email,))
+    roll_no = cur.fetchone()
+    roll_no=roll_no[0]
+    cur.execute("SELECT Course_ID FROM student_enrolled WHERE Roll_Number = %s", (roll_no,))
     courses = cur.fetchall()  # Fetch all rows
     return courses
 
 def fetch_prof_course(email):
     cur = mysql.connection.cursor()
-    cur.execute("SELECT Course_ID FROM course WHERE email = %s", (email,))
+    cur.execute("SELECT * FROM professor WHERE Email_ID = %s", (email,))
+    emp_id = cur.fetchone()
+    emp_id=emp_id[0]
+    cur.execute("SELECT Course_ID FROM instructor WHERE Employee_ID = %s", (emp_id,))
     courses = cur.fetchall()  # Fetch all rows
     return courses
 
 def fetch_name(email):
     cur = mysql.connection.cursor()
-    cur.execute("SELECT name FROM users WHERE email = %s", (email,))
+    cur.execute("SELECT First_Name FROM students WHERE Email_ID = %s", (email,))
     name = cur.fetchone() 
-    
+    if(name==None):
+        cur.execute("SELECT First_Name FROM professor WHERE Email_ID = %s", (email,))
+        name = cur.fetchone() 
+        if(name==None):
+            cur.execute("SELECT First_Name FROM staff WHERE Email_ID = %s", (email,))
+            name = cur.fetchone()
     return name[0]
 
 
