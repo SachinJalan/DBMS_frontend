@@ -16,8 +16,8 @@ app = Flask(__name__, template_folder=dir_path)
 app.secret_key = 'abcd2123445'  
 app.config['MYSQL_HOST'] = '127.0.0.1'
 app.config['MYSQL_PORT'] = 3306
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_USER'] = 'thor'
+app.config['MYSQL_PASSWORD'] = 'mjonir'
 app.config['MYSQL_DB'] = 'lab_bookings'
 
 mysql = MySQL(app)
@@ -48,13 +48,17 @@ def submit():
         if 'lab_name' in details:
                 # Lab booking form data
                 lab_name = details['lab_name']
-                time_from = details['time_from']
-                time_to= details['time_to']
+                time_slot = details['time_slot']
                 date= details['date']
                 cur = mysql.connection.cursor()
-                cur.execute("INSERT INTO bookings (user_email,name,lab_name,time_from, time_to,date) VALUES (%s,%s, %s, %s, %s, %s)", (email,name, lab_name, time_from, time_to,date))
-                mysql.connection.commit()
-                cur.close()
+                cur.execute("SELECT * FROM bookings WHERE lab_name = %s AND date = %s AND time_slot = %s", (lab_name, date, time_slot))
+                existing_booking = cur.fetchone()
+                if existing_booking:
+                    return redirect(url_for('booking_lab'))
+                else:
+                    cur.execute("INSERT INTO bookings (user_email, name, lab_name, time_slot, date) VALUES (%s, %s, %s, %s, %s)", (email, name, lab_name, time_slot, date))
+                    mysql.connection.commit()
+                    cur.close()
         
         elif 'Equipment_Name' in details:
                 # Equipment issuing form data
@@ -112,13 +116,21 @@ def submit():
                 
         else:
                 # Equipment issuing form data
-                equipment_type = details['equipmentType']
-                number_of_equipment = details['numberOfEquipment']
+                equipmentID = details['equipmentID']
+                # number_of_equipment = details['numberOfEquipment']
                 issue_date = details['issueDate']
                 return_date = details['returnDate']
                 
                 cur = mysql.connection.cursor()
-                cur.execute("INSERT INTO EquipmentIssued (user_email, equipment_type, number_of_equipment, issue_date, return_date) VALUES (%s, %s, %s, %s, %s)", (email, equipment_type, number_of_equipment, issue_date, return_date))
+                cur.execute("SELECT ID,isAvailable FROM inventory WHERE ID = %s", (equipmentID,))
+                existing_id = cur.fetchone()
+                if not existing_id:
+                    return redirect(url_for('booking_lab'))
+                elif (existing_id[1]==0):
+                    return redirect(url_for('booking_lab'))
+                cur.execute("INSERT INTO EquipmentIssued (user_email, equipmentID, issue_date, return_date) VALUES (%s, %s, %s, %s)", (email, equipmentID, issue_date, return_date))
+                mysql.connection.commit()
+                cur.execute("UPDATE inventory SET isAvailable = 0 WHERE ID = %s", (equipmentID,))
                 mysql.connection.commit()
                 cur.close()
                 

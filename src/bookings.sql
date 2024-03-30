@@ -8,8 +8,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     user_email VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL,
     lab_name VARCHAR(255) NOT NULL,
-    time_from TIME NOT NULL,
-    time_to TIME NOT NULL ,
+    time_slot VARCHAR(255) NOT NULL,
     date DATE NOT NULL
 );
 
@@ -56,8 +55,9 @@ CREATE TABLE IF NOT EXISTS bookings (
 CREATE TABLE IF NOT EXISTS EquipmentIssued (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_email VARCHAR(255),
-    equipment_type VARCHAR(255),
-    number_of_equipment INT,
+    -- equipment_type VARCHAR(255),
+    -- number_of_equipment INT,
+    equipmentID bigint,
     issue_date DATE,
     return_date DATE
 );
@@ -261,7 +261,7 @@ CREATE TABLE `inventory` (
   `Vendor_Address` json DEFAULT NULL,
   `Vendor_Phone_Number` varchar(255) DEFAULT NULL,
   `Manufacturer_Name` varchar(255) DEFAULT NULL,
-  `Status` varchar(255) DEFAULT NULL,
+  `isAvailable` BOOLEAN DEFAULT 1,
    `Lab_Name` ENUM('Anatomy Lab', 'Biochemistry Lab', 'Biology Lab', 'Botany Lab', 'Chemistry Lab', 'Computer Lab', 'Ecology Lab', 'Engineering Lab', 'Genetics Lab', 'Geology Lab', 'Microbiology Lab', 'Neuroscience Lab', 'Physics Lab', 'Psychology Lab', 'Zoology Lab') NOT NULL, 
   `Quantity` int DEFAULT NULL,
   PRIMARY KEY (`ID`),

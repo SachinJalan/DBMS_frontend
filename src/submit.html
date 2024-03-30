@@ -27,8 +27,8 @@
                     <thead class="bg-gray-50">
                         <tr>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lab Name</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time From</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time To</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time Slot</th>
+                            <!-- <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time To</th> -->
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                         </tr>
                     </thead>
@@ -36,9 +36,9 @@
                         {% for booking in lab_bookings %}
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">{{ booking[3] }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ booking[4] }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ booking[5] }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ booking[6] }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ booking[4] }}</td>
+                            <!-- <td class="px-6 py-4 whitespace-nowrap">{{ booking[6] }}</td> -->
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -51,8 +51,8 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Equipment Type</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Equipment ID</th>
+                            <!-- <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th> -->
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Issued on</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Return by</th>
                         </tr>
@@ -60,10 +60,10 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         {% for equipment in equipment_issued %}
                         <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ equipment[4] }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ equipment[2] }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ equipment[3] }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ equipment[4] }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ equipment[5] }}</td>
+                            <!-- <td class="px-6 py-4 whitespace-nowrap">{{ equipment[5] }}</td> -->
                         </tr>
                         {% endfor %}
                     </tbody>
