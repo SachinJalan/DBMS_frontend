@@ -97,12 +97,19 @@
         </select>
       </div>
       <div class="mb-4">
-        <label for="time_from" class="block text-gray-700 font-bold mb-2">Time From:</label>
-        <input type="time" name="time_from" id="time_from" class="form-input mt-1 block w-full border-gray-400">
-      </div>
-      <div class="mb-4">
-        <label for="time_to" class="block text-gray-700 font-bold mb-2">Time To:</label>
-        <input type="time" name="time_to" id="time_to" class="form-input mt-1 block w-full border-gray-400">
+        <label for="time_slot" class="block text-gray-700 font-bold mb-2">Time Slot:</label>
+        <select name="time_slot" id="time_slot" class="form-select mt-1 block w-full border-gray-400">
+          <option value="Slot 1">8:30-10:00</option>
+          <option value="Slot 2">10:00-11:30</option>
+          <option value="Slot 3">11:30-13:00</option>
+          <option value="Slot 4">13:00-14:00</option>
+          <option value="Slot 5">14:00-15:30</option>
+          <option value="Slot 6">15:30-17:00</option>
+          <option value="Slot 7">17:00-18:30</option>
+          <option value="Slot 8">18:30-20:00</option>
+          <option value="Slot 9">20:00-21:30</option>
+          <option value="Slot 10">21:30-23:00</option>
+        </select>
       </div>
       <div class="mb-4">
         <label for="date" class="block text-gray-700 font-bold mb-2">Date:</label>
@@ -127,19 +134,23 @@
         <label for="name" class="block text-gray-700 font-bold mb-2">Name:</label>
         <input type="text" name="name" id="name" class="form-input mt-1 block w-full border-gray-400">
       </div> -->
-      <div class="mb-4">
+      <!-- <div class="mb-4">
         <label for="equipmentType" class="block text-gray-700 font-bold mb-2">Equipment Type:</label>
         <select name="equipmentType" id="equipmentType" class="form-select mt-1 block w-full border-gray-400">
           <option value="laptop">Laptop</option>
           <option value="projector">Projector</option>
           <option value="microscope">Microscope</option>
         </select>
-      </div>
+      </div> -->
       <div class="mb-4">
+        <label for="equipmentID" class="block text-gray-700 font-bold mb-2">Equipment ID:</label>
+        <input type="text" name="equipmentID" id="equipmentID" class="form-input mt-1 block w-full border-gray-400">
+    </div>
+      <!-- <div class="mb-4">
         <label for="numberOfEquipment" class="block text-gray-700 font-bold mb-2">Number of Equipment:</label>
         <input type="number" name="numberOfEquipment" id="numberOfEquipment"
           class="form-input mt-1 block w-full border-gray-400">
-      </div>
+      </div> -->
       <div class="mb-4">
         <label for="issueDate" class="block text-gray-700 font-bold mb-2">Issue Date:</label>
         <input type="date" name="issueDate" id="issueDate" class="form-input mt-1 block w-full border-gray-400">
