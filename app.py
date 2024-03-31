@@ -26,7 +26,7 @@ mysql = MySQL(app)
 session_email=None
 @app.route('/')
 def index():
-    return render_template('login.html')
+    return render_template('index.html')
 
 @app.route('/submit', methods=['POST'])
 def submit():
