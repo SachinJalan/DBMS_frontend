@@ -8,9 +8,10 @@ import os
 # app = Flask(__name__,  template_folder='C:/Users/anish/Desktop/Frontend_Lab/DBMS_frontend/src')
 
 # Get the absolute path of the directory where this file is located
-dir_path = os.path.dirname(os.path.realpath(__file__))
+# dir_path = os.path.dirname(os.path.realpath(__file__))
 
-app = Flask(__name__, template_folder=dir_path)
+# app = Flask(__name__, template_folder=dir_path)
+app = Flask(__name__)
 
 # Configure MySQL
 app.secret_key = 'abcd2123445'  
