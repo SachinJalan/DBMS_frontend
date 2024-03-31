@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title> Hover Cards </title>
+    <title> Lab Management System </title>
     <link rel="stylesheet" href="../static/styles/style.css" type="text/css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
@@ -10,47 +10,30 @@
 
 <body>
     <!--navbar code from bootstrap-->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <!-- <div class="navbar navbar-expand-lg mx-5 flex-row">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#"> <img src="../static/images/logo.png" height="28px" width="28px"> IIT
-                Gandhinagar
-                </img> </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <a class="navbar-brand text-bold" href="#"> <img class="me-4" src="../static/images/logo.png" width="8.33%">
+                Lab Management </a>
+            <div class="" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 flex-row text-secondary hover:text-light">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Dropdown
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                        <a class="nav-link active" aria-current="page" href="login">Login</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
             </div>
+        </div>
+    </div> -->
+
+    <nav class="text-gray-600 body-font bg-white">
+        <div class="container_nav mx-10 flex flex-wrap flex-col md:flex-row items-center justify-between">
+            <div class="flex title-font font-medium items-center text-gray-900 my-3 md:mb-0">
+                <img src="../static/images/logo.png" alt="logo" class="w-1/12 mr-4">
+                <h1 class="mt-1 text-2xl font-bold titleNav">Lab Management</h1>
+            </div>
+
+            <ul class="flex flex-wrap text-base mt-3">
+                <li><a href="login" class="mr-5 hover:text-gray-900 link">Login</a></li>
+            </ul>
         </div>
     </nav>
     <!--navbar code ends here-->
